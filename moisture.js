@@ -1,14 +1,17 @@
 const {
   calculateDifference,
   calculateWaterContent,
-  parseString,
-  parseNumber,
+  parseTareMatMass,
+  parseTareMass,
+  parseDryMassBal,
+  parseId,
 } = require('./utils');
 
 const obj = {};
 
+// Object model
 class MoistureContent {
-  constructor({ tId, tMass, tMatWetMass, dryMassBal, tMatDryMass }) {
+  constructor({ tId, tMass, dryMassBal, tMatWetMass, tMatDryMass }) {
     (this.measurements = {
       tId: tId,
       tMass: tMass,
@@ -30,19 +33,20 @@ class MoistureContent {
   }
 }
 
-// Deeper parsing still required...
+// Validate input data and create object model
 obj.moistureContent = (input) => {
+  const { tMatWetMass, tMatDryMass } = parseTareMatMass(input);
+
   const parsedData = {
-    tId: parseString(input.tId),
-    tMass: parseNumber(input.tMass),
-    tMatWetMass: parseNumber(input.tMatWetMass),
-    dryMassBal: parseString(input.dryMassBal),
-    tMatDryMass: parseNumber(input.tMatDryMass),
+    tId: parseId(input.tId),
+    tMass: parseTareMass(input),
+    dryMassBal: parseDryMassBal(input.dryMassBal),
+    tMatWetMass: tMatWetMass,
+    tMatDryMass: tMatDryMass,
   };
   return new MoistureContent(parsedData);
 };
 
 module.exports = {
   create: obj.moistureContent,
-  calculate: calculateDifference,
 };

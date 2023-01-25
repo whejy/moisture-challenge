@@ -27,15 +27,22 @@ describe('calculations', () => {
   test('Water Content calculation is correct', () => {
     expect(results.waterContent()).toBe(15.0);
   });
+});
 
-  test('Invalid input type correctly throws', () => {
+describe('invalid input types', () => {
+  test('Invalid input types correctly throw', () => {
     const invalidNumberInput = { ...inputData, tMass: 'string' };
     const invalidStringInput = { ...inputData, tId: null };
+    const invalidEquality = { ...inputData, tMatDryMass: inputData.tMass };
+
     expect(() => moistureContent.create(invalidNumberInput)).toThrow(
-      'Invalid or missing input type. Value must be a number.'
+      'Tare Mass is expected, a missing or 0 Tare Mass may indicate an issue with the result.'
     );
     expect(() => moistureContent.create(invalidStringInput)).toThrow(
-      'Invalid or missing input type. Value must be a string.'
+      'Invalid or missing Tare Id. Value must be a string of less than 20 characters.'
+    );
+    expect(() => moistureContent.create(invalidEquality)).toThrow(
+      'Tare Mass is equal to Tare and Material Dry Mass, cannot calculate a result.'
     );
   });
 });
