@@ -1,16 +1,19 @@
 const moistureContent = require('../moisture');
+const { calculateDifference } = require('../utils');
 
-// tareId, tareMass, tareMaterialWetMass, dryMassBalance, tareMaterialDryMass
-const inputData = ['MT001', 300.0, 2859.6, '01BAL', 2525.7];
+const inputData = {
+  tId: 'MT001',
+  tMass: 300.0,
+  tMatWetMass: 2859.6,
+  dryMassBal: '01BAL',
+  tMatDryMass: 2525.7,
+};
 
-const results = moistureContent.create(...inputData);
+const results = moistureContent.create(inputData);
 
 describe('calculations', () => {
   test('Calculate function works correctly', () => {
-    expect(moistureContent.calculate(3.68, 2.12)).toBe(1.6);
-    expect(() => moistureContent.calculate('nonInt', 3)).toThrow(
-      'Invalid value: nonInt'
-    );
+    expect(calculateDifference(3.68, 2.12)).toBe(1.6);
   });
 
   test('Material Wet Mass calculation is correct', () => {
@@ -23,5 +26,16 @@ describe('calculations', () => {
 
   test('Water Content calculation is correct', () => {
     expect(results.waterContent()).toBe(15.0);
+  });
+
+  test('Invalid input type correctly throws', () => {
+    const invalidNumberInput = { ...inputData, tMass: 'string' };
+    const invalidStringInput = { ...inputData, tId: null };
+    expect(() => moistureContent.create(invalidNumberInput)).toThrow(
+      'Invalid or missing input type. Value must be a number.'
+    );
+    expect(() => moistureContent.create(invalidStringInput)).toThrow(
+      'Invalid or missing input type. Value must be a string.'
+    );
   });
 });

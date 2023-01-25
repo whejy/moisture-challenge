@@ -1,56 +1,45 @@
+const {
+  calculateDifference,
+  calculateWaterContent,
+  parseString,
+  parseNumber,
+} = require('./utils');
+
 const obj = {};
 
-// Validate input and perform subtraction
-function calculateDifference(a, b) {
-  const parsedA = parseFloat(a);
-  const parsedB = parseFloat(b);
-  let value = '';
-
-  if (!isNaN(parsedA) && !isNaN(parsedB)) {
-    return parseFloat((parsedA - parsedB).toFixed(1));
-  }
-
-  isNaN(parsedA) ? (value = a) : (value = b);
-  throw new Error(`Invalid value: ${value}`);
-}
-
 class MoistureContent {
-  constructor(
-    tareId,
-    tareMass,
-    tareMaterialWetMass,
-    dryMassBalance,
-    tareMaterialDryMass
-  ) {
+  constructor({ tId, tMass, tMatWetMass, dryMassBal, tMatDryMass }) {
     (this.measurements = {
-      tareId: tareId,
-      tareMass: tareMass,
-      tareMaterialWetMass: tareMaterialWetMass,
+      tId: tId,
+      tMass: tMass,
+      tMatWetMass: tMatWetMass,
       get materialWetMass() {
-        return calculateDifference(tareMaterialWetMass, tareMass);
+        return calculateDifference(tMatWetMass, tMass);
       },
     }),
       (this.dryMass = {
-        dryMassBalance: dryMassBalance,
-        tareMaterialDryMass: tareMaterialDryMass,
+        dryMassBal: dryMassBal,
+        tMatDryMass: tMatDryMass,
         get materialDryMass() {
-          return calculateDifference(tareMaterialDryMass, tareMass);
+          return calculateDifference(tMatDryMass, tMass);
         },
       }),
       (this.waterContent = () => {
-        return parseFloat(
-          (
-            (calculateDifference(tareMaterialWetMass, tareMaterialDryMass) /
-              calculateDifference(tareMaterialDryMass, tareMass)) *
-            100
-          ).toFixed(1)
-        );
+        return calculateWaterContent(tMatWetMass, tMatDryMass, tMass);
       });
   }
 }
 
-obj.moistureContent = (...input) => {
-  return new MoistureContent(...input);
+// Deeper parsing still required...
+obj.moistureContent = (input) => {
+  const parsedData = {
+    tId: parseString(input.tId),
+    tMass: parseNumber(input.tMass),
+    tMatWetMass: parseNumber(input.tMatWetMass),
+    dryMassBal: parseString(input.dryMassBal),
+    tMatDryMass: parseNumber(input.tMatDryMass),
+  };
+  return new MoistureContent(parsedData);
 };
 
 module.exports = {
