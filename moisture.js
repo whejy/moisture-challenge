@@ -7,8 +7,6 @@ const {
   parseId,
 } = require('./utils');
 
-const obj = {};
-
 // Object model
 class MoistureContent {
   constructor({ tId, tMass, dryMassBal, tMatWetMass, tMatDryMass }) {
@@ -34,7 +32,7 @@ class MoistureContent {
 }
 
 // Validate input data and create MoistureContent object
-obj.moistureContent = (input) => {
+const moistureContent = (input) => {
   const { tMatWetMass, tMatDryMass } = parseTareMatMass(input);
 
   const parsedData = {
@@ -48,5 +46,5 @@ obj.moistureContent = (input) => {
 };
 
 module.exports = {
-  create: obj.moistureContent,
+  create: moistureContent,
 };

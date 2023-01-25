@@ -1,5 +1,5 @@
-const moistureContent = require('../moisture');
-const { calculateDifference } = require('../utils');
+const moistureContent = require('./moisture');
+const { calculateDifference } = require('./utils');
 
 const inputData = {
   tId: 'MT001',
