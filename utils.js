@@ -68,7 +68,7 @@ const calculateDifference = (a, b) => {
   return parseFloat((a - b).toFixed(1));
 };
 
-const calculateWaterContent = (tMatWetMass, tMatDryMass, tMass) => {
+const calculateWaterContent = ({ tMatWetMass, tMatDryMass, tMass }) => {
   const numerator = calculateDifference(tMatWetMass, tMatDryMass);
   const denominator = calculateDifference(tMatDryMass, tMass);
   return parseFloat(((numerator / denominator) * 100).toFixed(1));

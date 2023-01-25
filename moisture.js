@@ -28,12 +28,12 @@ class MoistureContent {
         },
       }),
       (this.waterContent = () => {
-        return calculateWaterContent(tMatWetMass, tMatDryMass, tMass);
+        return calculateWaterContent({ tMatWetMass, tMatDryMass, tMass });
       });
   }
 }
 
-// Validate input data and create object model
+// Validate input data and create MoistureContent object
 obj.moistureContent = (input) => {
   const { tMatWetMass, tMatDryMass } = parseTareMatMass(input);
 
